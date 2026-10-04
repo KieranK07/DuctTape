@@ -1,0 +1,12 @@
+DuctTape for Mac: what's in this download besides DuctTape
+
+BepInEx 5.4.23.5 (MIT, LICENSE-BepInEx.txt), https://github.com/BepInEx/BepInEx
+  BepInEx/core. BepInEx.dll and BepInEx.Preloader.dll are built, unmodified, from the v5-lts source at f4c1b11, which
+  has the native Apple Silicon fix (PR #1402 by cdobbyn) that no release has yet. The other files are from the
+  5.4.23.5 release.
+
+UnityDoorstop 4.6.0 (LGPL-2.1, LICENSE-UnityDoorstop.txt), https://github.com/NeighTools/UnityDoorstop
+  libdoorstop.dylib, unmodified from the CI release. run_bepinex.sh is BepInEx 5.4.23.5's script with the game's
+  name filled in (executable_name="ROUNDS.app").
+
+Odin Serializer (Apache 2.0, BepInEx/plugins/OdinSerializer/LICENSE.txt), https://github.com/TeamSirenix/odin-serializer

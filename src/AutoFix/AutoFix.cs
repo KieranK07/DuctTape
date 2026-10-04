@@ -25,7 +25,7 @@ sealed class AutoFix(AutoFix.Settings settings, ManualLogSource log)
 
     readonly string indexPath = Path.Combine(settings.Cache, "index.tsv");
     readonly string originals = Path.Combine(settings.Cache, "originals");
-    readonly Curated curated = new(settings.Cache, log);
+    readonly Curated curated = new(log);
     Game? game;
     Scanner? scanner;
 
@@ -52,7 +52,7 @@ sealed class AutoFix(AutoFix.Settings settings, ManualLogSource log)
         var todo = new List<(string rel, FileInfo fi)>();
         foreach (var (rel, fi) in files)
         {
-            // an old library left as it was (its port couldn't be downloaded then) is looked at again once it can be
+            // an old library left as it was (its port wasn't installed then) is looked at again once it is
             if (!keyChanged && index.TryGetValue(rel, out var e) && e.Size == fi.Length && e.Time == fi.LastWriteTimeUtc.Ticks
                 && !(e.Result == Old && ports.Count > 0)) next[rel] = e;
             else todo.Add((rel, fi));
@@ -253,7 +253,6 @@ sealed class AutoFix(AutoFix.Settings settings, ManualLogSource log)
             {
                 if (!File.Exists(path) || !File.Exists(o) || Sha(File.ReadAllBytes(path)) != kv.Value.Sha) continue;
                 Replace(path, File.ReadAllBytes(o));
-                Curated.Restored(path);
                 n++;
             }
             catch (Exception ex) { log.LogWarning($"couldn't put back the original of {kv.Key}: {ex.Message}"); }

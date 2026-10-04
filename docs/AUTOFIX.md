@@ -20,11 +20,11 @@ At each start, before any plugin loads:
 
 - `HideManagerGameObject` is turned on in `BepInEx.cfg` (the current game destroys plugins' objects otherwise). The
   Chainloader reads it after the patchers, so it counts from the first start.
-- **Libraries:** a file from an old UnboundLib 3, MMHook or RoundsWithFriends 2 release gets Bknibb's port in its place
-  (UnboundLib 4.2.5 with Octokit, its MMHOOK, RoundsWithFriends 3.0.10), downloaded from his GitHub releases into
-  `BepInEx/cache/rounds-port/downloads` and checked by SHA-256. .NET's own HTTPS first, then `curl` (Windows 10+ and macOS
-  have it). If any other copy of the library isn't an old release (a package brings a newer port), the old files are
-  left alone and BepInEx loads the newer one. Offline: the old file stays and the next start tries again.
+- **Libraries:** Bknibb's ports (UnboundLib 4 with its MMHOOK, RoundsWithFriends 3) are dependencies, installed like
+  any mod; nothing is downloaded. A file from an old UnboundLib 3, MMHook or RoundsWithFriends 2 release (the old mods'
+  own dependencies) gets the installed port's bytes, so whatever loads the library by name gets the port. Bknibb's
+  exact release is preferred; any other copy that isn't an old release counts too. Port not installed: the old file
+  stays, a warning says what to install, and the next start looks again.
 - **Curated patches:** exact mod versions that needed hand-made fixes (Cosmic Rounds 2.7.0, MapsExtended 1.4.2,
   ModdingUtils 0.4.8, ...) get the rounds-mac-modpack's binary patch, found by the file's SHA-256 (`src/AutoFix/curated`,
   made by `scripts/curated.py` from the toolkit's `patches/`), then `fix` as usual.
