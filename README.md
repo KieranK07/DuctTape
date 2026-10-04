@@ -17,8 +17,11 @@ for new versions of your mods, and no rebuilding your mod list.
 - **ROUNDS on the current version:** Steam → right-click ROUNDS → **Properties → Betas → None**.
 - **Your mods, any version,** plus the mods they need (each mod's Thunderstore page lists them, like UnboundLib and
   MMHook). On Thunderstore, a mod's page has a **Manual Download** button.
-- **Internet the first time you start the game with DuctTape:** it downloads [Bknibb](https://github.com/Bknibb)'s
-  updated UnboundLib and RoundsWithFriends from GitHub.
+- **[Bknibb](https://github.com/Bknibb)'s updated UnboundLib and RoundsWithFriends:** DuctTape puts them in place of
+  the old ones your mods depend on. From
+  [UnboundLib 4.2.5](https://github.com/Bknibb/UnboundLib/releases/tag/v4.2.5): `UnboundLib.dll`,
+  `MMHOOK_Assembly-CSharp.dll` and `Octokit.dll`. From
+  [RoundsWithFriends 3.0.10](https://github.com/Bknibb/RoundsWithFriends/releases/tag/v3.0.10): `RoundsWithFriends.dll`.
 - **BepInEx,** the mod loader: on Windows, BepInExPack_ROUNDS (step 1 below). The Mac download already has it.
 
 Your **game folder** is where all of this goes: Steam → right-click ROUNDS → **Manage → Browse local files**.
@@ -28,8 +31,10 @@ Your **game folder** is where all of this goes: Steam → right-click ROUNDS →
 1. Download the **DuctTape-macOS** zip from [Releases](https://github.com/KieranK07/DuctTape/releases/latest), unzip
    it and move everything inside it into your game folder. Already have a `BepInEx` folder there? Hold **Option** while
    you drag and choose **Merge**, so your mods stay.
-2. Unzip each mod into its own folder inside `BepInEx/plugins`.
-3. Open Steam. Then open Terminal and paste this:
+2. Put Bknibb's files in `BepInEx/plugins`: the three UnboundLib files in a new folder `Bknibb-UnboundLib`, and
+   `RoundsWithFriends.dll` in a new folder `Bknibb-RoundsWithFriends`.
+3. Unzip each mod into its own folder inside `BepInEx/plugins`.
+4. Open Steam. Then open Terminal and paste this:
 
    ```
    cd ~/Library/Application\ Support/Steam/steamapps/common/ROUNDS && ./run_bepinex.sh
@@ -43,18 +48,20 @@ Your **game folder** is where all of this goes: Steam → right-click ROUNDS →
    and copy what's inside its `BepInExPack_ROUNDS` folder into your game folder.
 2. Download the **DuctTape-Windows** zip from [Releases](https://github.com/KieranK07/DuctTape/releases/latest) and
    unzip it into your game folder.
-3. Unzip each mod into its own folder inside `BepInEx\plugins`.
-4. Start ROUNDS from Steam as usual.
+3. Put Bknibb's files in `BepInEx\plugins`: the three UnboundLib files in a new folder `Bknibb-UnboundLib`, and
+   `RoundsWithFriends.dll` in a new folder `Bknibb-RoundsWithFriends`.
+4. Unzip each mod into its own folder inside `BepInEx\plugins`.
+5. Start ROUNDS from Steam as usual.
 
 ### Did it work?
 
 The first start takes a few seconds longer. In the game folder, `BepInEx/LogOutput.log` then has lines from
 `rounds-port` (DuctTape's name in the log), like `Bknibb's port in place of the old release` and
-`6 mods: 5 fixed, 1 need nothing`.
+`8 mods: 6 fixed, 2 need nothing`. Missing Bknibb's files? A warning there says which one to install.
 
 ### Playing with friends
 
-Everyone in a lobby needs the current ROUNDS, the same mods and DuctTape. Mac and Windows players can play together.
+Everyone in a lobby needs the current ROUNDS, the same mods, Bknibb's ports and DuctTape. Mac and Windows players can play together.
 
 ## Rather not set it up by hand?
 
@@ -63,19 +70,18 @@ your mods from a list, share your mod list with friends as a code, and press Lau
 [its page](https://github.com/KieranK07/crosswind#rounds-mods-on-a-mac-and-windows).
 
 On r2modman, Thunderstore Mod Manager or Gale: the Thunderstore package is coming. It waits on Bknibb's ports being on
-Thunderstore, so they can be dependencies instead of downloads.
+Thunderstore, so the mod manager can install them as its dependencies.
 
 ## What it does
 
-Every time the game starts, it puts in Bknibb's updated UnboundLib and RoundsWithFriends, ports each old mod's code,
-applies hand-made fixes for the mods that needed more, and fixes the problems that only show while playing. Mods
+Every time the game starts, it puts Bknibb's UnboundLib and RoundsWithFriends in place of the old ones, ports each
+old mod's code, applies hand-made fixes for the mods that needed more, and fixes the problems that only show while playing. Mods
 behave as they did on the old game. The details: [thunderstore/README.md](thunderstore/README.md). How the 98
 most-downloaded mods did:
 [compatibility list](https://github.com/KieranK07/rounds-porting-toolkit/blob/main/docs/COMPATIBILITY.md).
 
-To turn it off, delete the `DuctTape` folders in `BepInEx/patchers` and `BepInEx/plugins`, and set
-`RestoreOriginals = true` in `BepInEx/config/rounds-port.autofix.cfg` first if you want your mods' original files
-back.
+To turn it off: set `RestoreOriginals = true` in `BepInEx/config/rounds-port.autofix.cfg`, start the game once (your
+mods get their original files back), then delete the `DuctTape` folders in `BepInEx/patchers` and `BepInEx/plugins`.
 
 A mod still broken? [Open an issue](https://github.com/KieranK07/DuctTape/issues) with its name and your
 `BepInEx/LogOutput.log`.

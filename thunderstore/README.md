@@ -28,7 +28,7 @@ Mods behave as they did on the old game. Nothing is added to menus or credits.
 
 ## Updated packages win
 
-If a package brings its own newer UnboundLib or RoundsWithFriends, that one is used and the old files are left alone.
+Whatever newer UnboundLib or RoundsWithFriends is installed is the one used (Bknibb's first), in place of the old copies.
 Mods that already have a version for the current game load as they are.
 
 ## Turning it off
