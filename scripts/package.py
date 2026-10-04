@@ -1,6 +1,6 @@
 """The Thunderstore package: thunderstore/ (manifest, README, icon) + AutoFix + Runtime + Odin Serializer -> dist/.
 
-    python scripts/package.py [version]
+    python scripts/package.py [version]      Odin comes from the toolkit next to this repo (or $ROUNDS_TOOLKIT)
 
 Build AutoFix and the Runtime first (Release). Layout as r2modman/Gale install it: patchers/ -> BepInEx/patchers/<pkg>,
 plugins/ -> BepInEx/plugins/<pkg>.
@@ -10,7 +10,9 @@ import json, os, sys, zipfile
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 TS = os.path.join(ROOT, "thunderstore")
-ODIN = os.path.join(ROOT, "odin")
+TK = os.environ.get("ROUNDS_TOOLKIT") or next(
+    (p for p in (os.path.join(ROOT, "..", n) for n in ("toolkit-repo", "rounds-porting-toolkit")) if os.path.isdir(p)), "")
+ODIN = os.path.join(TK, "odin")
 BIN = lambda p, f: os.path.join(ROOT, "src", p, "bin", "Release", "net472", f)
 
 FILES = {

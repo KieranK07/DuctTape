@@ -1,7 +1,7 @@
-"""Copies the hand-made patches (patches/: patches.tsv and the BSDIFF40 files) into src/AutoFix/curated, so AutoFix
+"""Copies the toolkit's hand-made patches (patches/: patches.tsv and the BSDIFF40 files) into src/AutoFix/curated, so AutoFix
 applies them for players on any mod manager.
 
-    python scripts/curated.py
+    python scripts/curated.py [<toolkit>]
 
 .NET Framework has no bzip2, so each BSDIFF40 patch is rewritten as BSDIFFDF: the same layout with raw deflate blocks
 (Curated.Bspatch reads it). Only .dll patches: the .pdb/.mdb ones only add line numbers to stack traces.
@@ -9,7 +9,10 @@ applies them for players on any mod manager.
 import bz2, hashlib, os, struct, sys, zlib
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-SRC = os.path.join(HERE, "..", "patches")
+# the ROUNDS Porting Toolkit checkout next to this one (toolkit-repo or rounds-porting-toolkit), or the path given
+TK = sys.argv[1] if len(sys.argv) > 1 else next(
+    (p for p in (os.path.join(HERE, "..", "..", n) for n in ("toolkit-repo", "rounds-porting-toolkit")) if os.path.isdir(p)), "")
+SRC = os.path.join(TK, "patches")
 OUT = os.path.join(HERE, "..", "src", "AutoFix", "curated")
 
 
@@ -60,7 +63,7 @@ def main():
     open(os.path.join(OUT, "patches.tsv"), "w", encoding="utf-8", newline="\n").write("\n".join(rows) + "\n")
 
     # check each rewritten patch on the file it's for, where the bench has a copy (store/ or a profile)
-    store = os.path.join(HERE, "..", "tests", "ingame")
+    store = os.path.join(TK, "tests", "ingame")
     have = {}
     for root, _, files in os.walk(store):
         for f in files:

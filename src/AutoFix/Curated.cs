@@ -7,10 +7,10 @@ using System.Text;
 using BepInEx.Logging;
 using Mono.Cecil;
 
-// What the Gale fork does to a ROUNDS profile before launch (gale-mac/src-tauri/src/rounds.rs), done here so players
+// What Crosswind does to a ROUNDS profile before launch (crosswind: src-tauri/src/rounds.rs), done here so players
 // on any mod manager get it: old UnboundLib 3 / MMHook / RoundsWithFriends 2 files become Bknibb's ports (downloaded
 // from GitHub, pinned by SHA-256), and exact mod versions that needed hand-made fixes get their patch from
-// rounds-mac-modpack (curated/, made by scripts/curated.py). AutoFix's own fix runs on the result.
+// the toolkit's patches/ (curated/, made by scripts/curated.py). AutoFix's own fix runs on the result.
 // Whatever a package provides wins: an old library is left alone when any other copy of it isn't an old release.
 sealed class Curated(string cache, ManualLogSource log)
 {

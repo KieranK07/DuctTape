@@ -8,11 +8,18 @@
     <Managed Condition="'$(Managed)' == '' And Exists('$(GameDir)/ROUNDS.app')">$(GameDir)/ROUNDS.app/Contents/Resources/Data/Managed</Managed>
     <Managed Condition="'$(Managed)' == ''">$(GameDir)/ROUNDS_Data/Managed</Managed>
   </PropertyGroup>
+  <!-- The ROUNDS Porting Toolkit checked out next to this repo: AutoFix builds from its scan/fix source, and the package
+       takes its Odin stand-in and hand-made patches. Somewhere else: dotnet build -p:Toolkit=/path/to/toolkit -->
+  <PropertyGroup>
+    <Toolkit Condition="'$(Toolkit)' == '' And Exists('$(MSBuildThisFileDirectory)../toolkit-repo')">$(MSBuildThisFileDirectory)../toolkit-repo</Toolkit>
+    <Toolkit Condition="'$(Toolkit)' == ''">$(MSBuildThisFileDirectory)../rounds-porting-toolkit</Toolkit>
+    <Toolkit>$([System.IO.Path]::GetFullPath('$(Toolkit)'))</Toolkit>
+  </PropertyGroup>
   <!-- Same bytes from any machine or checkout: no commit hash or SourceLink, source paths mapped. -->
   <PropertyGroup>
     <Deterministic>true</Deterministic>
     <EnableSourceControlManagerQueries>false</EnableSourceControlManagerQueries>
     <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
-    <PathMap>$(MSBuildProjectDirectory)=/_/$(MSBuildProjectName)</PathMap>
+    <PathMap>$(MSBuildProjectDirectory)=/_/$(MSBuildProjectName),$(Toolkit)=/_/toolkit</PathMap>
   </PropertyGroup>
 </Project>

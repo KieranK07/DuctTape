@@ -26,8 +26,8 @@
     <Reference Include="$(GameDir)/BepInEx/core/Mono.Cecil.Rocks.dll" Private="false" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="../rounds-port/Scanner.cs;../rounds-port/Fixer.cs;../rounds-port/Known.cs;../rounds-port/Game.cs" LinkBase="core" />
-    <EmbeddedResource Include="../rounds-port/helpers/compathelpers.dll" LogicalName="compathelpers.dll" />
+    <Compile Include="$(Toolkit)/src/rounds-port/Scanner.cs;$(Toolkit)/src/rounds-port/Fixer.cs;$(Toolkit)/src/rounds-port/Known.cs;$(Toolkit)/src/rounds-port/Game.cs" LinkBase="core" />
+    <EmbeddedResource Include="$(Toolkit)/src/rounds-port/helpers/compathelpers.dll" LogicalName="compathelpers.dll" />
     <EmbeddedResource Include="curated/*" LogicalName="curated/%(Filename)%(Extension)" />
   </ItemGroup>
   <Target Name="CopyToPlainName" AfterTargets="Build">

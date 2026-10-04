@@ -4,9 +4,9 @@ A BepInEx preloader patcher that runs `rounds-port fix` on old mods every time R
 them. Players keep the mods from Thunderstore as they are; nobody needs a new release from the mod's author for the
 parts `fix` handles.
 
-Players get it in the Thunderstore package (`thunderstore/`, built by `scripts/package.py`) with the Runtime and Odin
-Serializer. The Gale fork does the library and patch steps itself before launch; AutoFix then finds nothing left to do
-for them.
+Players get it in the DuctTape package (`thunderstore/`, built by `scripts/package.py`) with the Runtime and Odin
+Serializer. [Crosswind](https://github.com/KieranK07/crosswind) does the library and patch steps itself before launch;
+AutoFix then finds nothing left to do for them.
 
 ## Install
 
@@ -27,7 +27,7 @@ At each start, before any plugin loads:
   left alone and BepInEx loads the newer one. Offline: the old file stays and the next start tries again.
 - **Curated patches:** exact mod versions that needed hand-made fixes (Cosmic Rounds 2.7.0, MapsExtended 1.4.2,
   ModdingUtils 0.4.8, ...) get the rounds-mac-modpack's binary patch, found by the file's SHA-256 (`src/AutoFix/curated`,
-  made by `scripts/curated.py` from the Gale fork's copy), then `fix` as usual.
+  made by `scripts/curated.py` from the toolkit's `patches/`), then `fix` as usual.
 - Every DLL in `BepInEx/plugins` that uses the game or UnboundLib is scanned and fixed, like `rounds-port fix`.
 - A mod `fix` changes is **replaced in place** by the fixed copy. The original goes to
   `BepInEx/cache/rounds-port/originals/<sha256>.dll`.
@@ -75,7 +75,7 @@ rounds-mac-modpack) run the same code: AutoFix's output has the same meaning as 
 
 ## Testing
 
-`src/AutoFix` builds from the same scan/fix source as the CLI (`rounds-port.csproj`), for the game's Mono. Run on the
+`src/AutoFix` builds from the same scan/fix source as the CLI (the toolkit's `src/rounds-port`), for the game's Mono. Run on the
 game's own Mono outside the game against a profile with the 98 sweep packages (plus their libraries, Bknibb's
 UnboundLib and RWF), hard-linked like Gale's:
 

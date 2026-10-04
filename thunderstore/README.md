@@ -1,4 +1,4 @@
-# Rounds Port
+# DuctTape
 
 Play mods made before the December 2025 update on the current game, without waiting for new versions of them.
 Install it next to your mods. Nothing to set up.
@@ -46,7 +46,7 @@ Mods that already have a version for the current game load as they are.
   still load; the part that uses the removed code doesn't work.
 - Bugs mods already had on the old game stay.
 
-Problems: open an issue on [GitHub](https://github.com/KieranK07/rounds-porting-toolkit/issues) with your
+Problems: open an issue on [GitHub](https://github.com/KieranK07/DuctTape/issues) with your
 `BepInEx/LogOutput.log`.
 
 ## Credits
