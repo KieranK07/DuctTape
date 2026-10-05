@@ -23,6 +23,7 @@
     <Reference Include="$(Managed)/UnityEngine.CoreModule.dll" Private="false" />
     <Reference Include="$(Managed)/Unity.Localization.dll" Private="false" />
     <Reference Include="$(Managed)/UnityEngine.UI.dll" Private="false" />
+    <Reference Include="$(Managed)/Unity.TextMeshPro.dll" Private="false" />
     <Reference Include="$(Managed)/UnityEngine.UIModule.dll" Private="false" />
     <Reference Include="$(Managed)/UnityEngine.AssetBundleModule.dll" Private="false" />
     <Reference Include="$(Managed)/Unity.Postprocessing.Runtime.dll" Private="false" />

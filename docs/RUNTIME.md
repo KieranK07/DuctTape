@@ -23,6 +23,7 @@ rounds-mac-modpack's Mac Compat Fixes is installed, BepInEx skips this plugin: t
 | Cards Plus | Its Cyberpunk cards' effect also lands on the card prefab UnboundLib builds, which has no visual, and throws there at startup; skipped on the prefab only |
 | Card source online | UnboundLib makes each modded card its own `sourceCard`, and the 2025 `CardInfo.Awake` only looks the source up when it's empty: a card another player picked pointed at the destroyed pick-screen copy, so card rules (ModdingUtils, Cosmic Rounds' Beetle) differed between machines |
 | UnboundLib 4 health bars | Bknibb's UnboundLib 4 colours health bars for players with respawns left, reading `data.stats` every frame; things that aren't players (Cards+ snakes) have none and it threw every frame. UnboundLib 3 had no such patch |
+| Undrawn text materials | Asking a TextMeshPro text that hasn't been drawn yet for its materials throws now: LobbyImprovements builds its lobby code box from the main menu's font that way, so the box was never made |
 
 Source: `src/Runtime`. Patches whose target mod isn't installed are skipped. Safe to swap with Hot Reload: every load
 patches under its own Harmony id and undoes everything when it unloads.
