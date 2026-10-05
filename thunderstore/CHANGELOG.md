@@ -4,7 +4,8 @@
 
 UnboundLib 3.2.14 now becomes our fork of Bknibb's UnboundLib 4.2.7 (was his 4.2.5), with fixes for the current
 game: Escape goes back a page in the escape menu's MODS pages again, Toggle Cards and Toggle Levels open in front of
-the escape menu and the map (they opened behind them), a rematch no longer gets stuck on a card that's already gone,
+the escape menu and the map (they opened behind them), a rematch no longer gets stuck on a card that's already gone, in sandbox you spawn
+in on custom maps too,
 and it works on a Mac without a separate fix. No "has an update
 available!" line on the main menu for the UnboundLib and RoundsWithFriends DuctTape makes, since a mod manager can't
 update them. Cards built from an asset bundle (RSCards and others) show their descriptions again. AutoFix 1.5.1,
