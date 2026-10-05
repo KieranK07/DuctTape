@@ -21,15 +21,15 @@ namespace RoundsPort.Runtime
         static bool Prefix(object[] __args) => __args.Length > 1 && __args[1] is CharacterData data && data != null && data.stats != null;
     }
 
-    // Bknibb's UnboundLib 4 and RoundsWithFriends 3 ask GitHub on every start whether a newer release is out, and put
-    // "<mod> has an update available!" on the main menu. UnboundLib 3 had no such check. The copies AutoFix makes from
-    // the old packages can't be updated by a mod manager, and one put in by hand loses the macOS fix, so the line only
-    // misleads: it's skipped for the exact versions AutoFix makes. Any other version, and other mods' checks, stay.
+    // Bknibb's RoundsWithFriends 3 asks GitHub on every start whether a newer release is out, and puts "<mod> has an
+    // update available!" on the main menu (our UnboundLib fork doesn't ask). RoundsWithFriends 2 had no such check. The
+    // copy AutoFix makes from the old package can't be updated by a mod manager, so the line only misleads: it's skipped
+    // for the exact version AutoFix makes. Any other version, and other mods' checks, stay.
     [HarmonyPatch]
     internal static class UL_UpdateNotice_Fix
     {
         // "<repo owner>/<repo name> <version>" of the ports AutoFix's patches produce
-        static readonly string[] Ours = { "Bknibb/UnboundLib 4.2.7", "Bknibb/RoundsWithFriends 3.0.10" };
+        static readonly string[] Ours = { "Bknibb/RoundsWithFriends 3.0.10" };
         static readonly HashSet<string> logged = new HashSet<string>();
         internal static ManualLogSource Log;
 

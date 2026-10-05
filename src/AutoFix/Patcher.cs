@@ -37,13 +37,9 @@ public static class AutoFixPatcher
             "Mods never to touch, comma-separated: DLL names (MapsExtended.dll) or folder names (olavim-MapsExtended). A mod fixed earlier gets its original back.");
         var restore = cfg.Bind("General", "RestoreOriginals", false,
             "Put back the original of every mod AutoFix changed, then turn AutoFix off (Enabled = false).");
-        var leaveManual = cfg.Bind("Manual", "LeaveManualMods", false,
-            "Leave mods that have MANUAL items (problems only their authors can fix) exactly as they are, instead of fixing everything else in them.");
-        var fixAnyway = cfg.Bind("Manual", "FixAnyway", "",
-            "With LeaveManualMods on: mods to fix anyway, comma-separated, as in Exclude.");
 
         var settings = new AutoFix.Settings(Paths.GameRootPath, Paths.ManagedPath, Paths.BepInExAssemblyDirectory, Paths.PluginPath,
-            Path.Combine(Paths.CachePath, "rounds-port"), leaveManual.Value, List(exclude.Value), List(fixAnyway.Value));
+            Path.Combine(Paths.CachePath, "rounds-port"), List(exclude.Value));
         var autofix = new AutoFix(settings, log);
         if (restore.Value)
         {

@@ -19,7 +19,6 @@ namespace RoundsPort.Runtime
         static Dictionary<string, Shader> native;
         static int nativeFrame = -1;
 
-        public static bool IsForeignPublic(Shader sh) => sh != null && foreign.Contains(sh);
         static bool IsForeign(Shader sh) => sh != null && (foreign.Contains(sh) || !sh.isSupported);
 
         // The game's own copy of a shader: mod bundles add same-named duplicates (D3D-only) that may still

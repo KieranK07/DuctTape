@@ -33,7 +33,7 @@ At each start, before any plugin loads:
 - A mod `fix` changes is **replaced in place** by the fixed copy. The original goes to
   `BepInEx/cache/rounds-port/originals/<sha256>.dll`.
 - A mod with MANUAL items (problems only its author can fix) still gets everything else fixed, and the log names
-  what's left. Left alone, it would fail on the fixable problems too (see `LeaveManualMods`).
+  what's left. Left alone, it would fail on the fixable problems too.
 - The results go into `BepInEx/cache/rounds-port/index.tsv`. A start with no new or updated mods reads none of them
   (about 50 ms for 100 mods). The first start after installing 100 mods takes about 4 s.
 - A new version of AutoFix, a game update or a settings change re-checks every mod, starting from its original.
@@ -48,8 +48,8 @@ One line per mod in `BepInEx/LogOutput.log`, from source `rounds-port`:
 
 ```
 [Info   :rounds-port] fixed Root-Classes_Manager_Reborn/ClassesManagerReborn.dll: 3 kinds of change
-[Warning:rounds-port] left RS_Mind-RSClasses/RSClasses.dll as it is: 1 MANUAL item: RSClasses.ShieldBash::OnBlock RPC("RPCA_AddSlow") with 1 argument. ...
-[Info   :rounds-port] 106 mods: 47 fixed, 45 need nothing, 13 left as they are (problems only their authors can fix) (3954 ms)
+[Warning:rounds-port] fixed RS_Mind-RSClasses/RSClasses.dll: 2 kinds of change; 1 MANUAL item left, which only its author can fix: RSClasses.ShieldBash::OnBlock RPC("RPCA_AddSlow") with 1 argument
+[Info   :rounds-port] 105 mods: 60 fixed (13 with problems only their authors can fix), 45 need nothing (3954 ms)
 ```
 
 ## Settings
@@ -61,8 +61,6 @@ One line per mod in `BepInEx/LogOutput.log`, from source `rounds-port`:
 | `Enabled` | true | |
 | `Exclude` | | DLL or folder names never to touch, comma-separated. A mod fixed earlier gets its original back. |
 | `RestoreOriginals` | false | Puts every original back at the next start, then sets `Enabled = false`. |
-| `LeaveManualMods` | false | Leave mods with MANUAL items exactly as they are instead. |
-| `FixAnyway` | | With `LeaveManualMods` on: mods to fix anyway. |
 
 To undo everything: `RestoreOriginals = true`, start the game once. Deleting `BepInEx/cache` loses the originals; the
 fixed mods then stay fixed until the mod manager reinstalls them.

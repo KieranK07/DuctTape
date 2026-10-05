@@ -10,8 +10,7 @@ using Mono.Cecil;
 // write time, hashes) means a start with no new or updated mods doesn't read any of them.
 sealed class AutoFix(AutoFix.Settings settings, ManualLogSource log)
 {
-    public sealed record Settings(string GameDir, string Managed, string Core, string Plugins, string Cache,
-        bool LeaveManualMods, string[] Exclude, string[] FixAnyway);
+    public sealed record Settings(string GameDir, string Managed, string Core, string Plugins, string Cache, string[] Exclude);
 
     sealed class Entry
     {
@@ -21,7 +20,7 @@ sealed class AutoFix(AutoFix.Settings settings, ManualLogSource log)
     }
 
     // index results
-    const string Fixed = "fixed", Unchanged = "unchanged", NotMod = "not-a-mod", Manual = "manual", Excluded = "excluded", Error = "error", Old = "old";
+    const string Fixed = "fixed", Unchanged = "unchanged", NotMod = "not-a-mod", Excluded = "excluded", Error = "error", Old = "old";
 
     readonly string indexPath = Path.Combine(settings.Cache, "index.tsv");
     readonly string originals = Path.Combine(settings.Cache, "originals");
@@ -34,8 +33,7 @@ sealed class AutoFix(AutoFix.Settings settings, ManualLogSource log)
     {
         string gameMvid;
         using (var m = ModuleDefinition.ReadModule(Path.Combine(settings.Managed, "Assembly-CSharp.dll"))) gameMvid = m.Mvid.ToString();
-        return string.Join(" ", typeof(AutoFix).Assembly.ManifestModule.ModuleVersionId, gameMvid, settings.LeaveManualMods,
-            string.Join(",", settings.Exclude), string.Join(",", settings.FixAnyway));
+        return string.Join(" ", typeof(AutoFix).Assembly.ManifestModule.ModuleVersionId, gameMvid, string.Join(",", settings.Exclude));
     }
 
     public void Run()
@@ -114,14 +112,13 @@ sealed class AutoFix(AutoFix.Settings settings, ManualLogSource log)
         int partly = next.Values.Count(e => e.Result == Fixed && e.Note.Length > 0);
         var summary = $"{mods} mods: {Count(Fixed)} fixed" + (partly > 0 ? $" ({partly} with problems only their authors can fix)" : "") +
                       $", {Count(Unchanged)} need nothing";
-        if (Count(Manual) > 0) summary += $", {Count(Manual)} left as they are (LeaveManualMods)";
         if (Count(Excluded) > 0) summary += $", {Count(Excluded)} excluded";
         if (Count(Error) > 0) summary += $", {Count(Error)} with errors";
         if (Count(Old) > 0) summary += $"; {Count(Old)} old librar{(Count(Old) == 1 ? "y" : "ies")} skipped";
         log.LogInfo($"{summary} ({clock.ElapsedMilliseconds} ms)");
         if (todo.Count == 0)
-            foreach (var kv in next.Where(kv => kv.Value.Result is Manual or Error))
-                log.LogInfo($"  {(kv.Value.Result == Manual ? "left as it is" : "error")}: {kv.Key}: {kv.Value.Note}");
+            foreach (var kv in next.Where(kv => kv.Value.Result == Error))
+                log.LogInfo($"  error: {kv.Key}: {kv.Value.Note}");
     }
 
     // One mod DLL, new or changed since the last start (or everything changed: e is the old entry).
@@ -203,12 +200,6 @@ sealed class AutoFix(AutoFix.Settings settings, ManualLogSource log)
         var fixedBytes = ms.ToArray();
         var left = scanner.Scan(ModuleDefinition.ReadModule(new MemoryStream(fixedBytes), rp));
         var manual = left.Where(i => i.Fix == Fix.Manual).ToList();
-        if (manual.Count > 0 && settings.LeaveManualMods && !Matches(rel, settings.FixAnyway))
-        {
-            var note = $"{manual.Count} MANUAL item{(manual.Count == 1 ? "" : "s")}: " + string.Join("; ", manual.Take(3).Select(i => i.What)) + (manual.Count > 3 ? "; ..." : "");
-            log.LogWarning($"left {rel} as it is (LeaveManualMods): {note}");
-            return Done(Manual, OneLine(note));
-        }
 
         var saved = Save(fixedBytes, manual.Count > 0 ? $"{manual.Count} MANUAL left" : null, Fixed);
         if (saved.Result == Error) return saved;
@@ -229,12 +220,10 @@ sealed class AutoFix(AutoFix.Settings settings, ManualLogSource log)
         {
             try
             {
-                using (var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete))
-                {
-                    var b = new byte[fs.Length]; int n = 0;
-                    while (n < b.Length) { int r = fs.Read(b, n, b.Length - n); if (r <= 0) throw new EndOfStreamException(path); n += r; }
-                    return b;
-                }
+                using var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
+                var ms = new MemoryStream();
+                fs.CopyTo(ms);
+                return ms.ToArray();
             }
             catch (IOException) when (i < 10 && File.Exists(path)) { System.Threading.Thread.Sleep(300); }
         }
@@ -350,7 +339,7 @@ sealed class AutoFix(AutoFix.Settings settings, ManualLogSource log)
         File.Move(indexPath + ".rptmp", indexPath);
     }
 
-    static string Sha(byte[] bytes)
+    internal static string Sha(byte[] bytes)
     {
         using var sha = SHA256.Create();
         return BitConverter.ToString(sha.ComputeHash(bytes)).Replace("-", "").ToLowerInvariant();

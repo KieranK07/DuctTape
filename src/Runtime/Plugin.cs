@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
@@ -110,29 +111,13 @@ namespace RoundsPort.Runtime
     {
         public static string Strip(string s) => s?.Replace("(Clone)", "").Trim();
 
-        public static CardInfo FindByName(string name)
+        // The card named name among the game's and the hidden cards; with everything, any loaded card.
+        public static CardInfo Find(string name, bool everything)
         {
-            if (CardChoice.instance != null)
-                foreach (var c in CardChoice.instance.cards)
-                    if (c != null && Strip(c.gameObject.name) == name) return c;
-            foreach (var c in HiddenCards())
-                if (c != null && Strip(c.gameObject.name) == name) return c;
-            foreach (var c in Resources.FindObjectsOfTypeAll<CardInfo>())
-                if (c != null && Strip(c.gameObject.name) == name) return c;
-            return null;
-        }
-
-        // Cards picked from pooled/network-spawned objects don't always carry the exact "<name>(Clone)" name
-        // UnboundLib's GetSourceCard prefix requires, so it returns null and the card bar gets an empty button.
-        public static CardInfo FindSource(CardChoice choice, CardInfo info)
-        {
-            if (info == null) return null;
-            var name = Strip(info.gameObject.name);
-            foreach (var c in choice.cards)
-                if (c != null && Strip(c.gameObject.name) == name) return c;
-            foreach (var c in HiddenCards())
-                if (c != null && Strip(c.gameObject.name) == name) return c;
-            return null;
+            var cards = HiddenCards();
+            if (CardChoice.instance != null) cards = CardChoice.instance.cards.Concat(cards);
+            if (everything) cards = cards.Concat(Resources.FindObjectsOfTypeAll<CardInfo>());
+            return cards.FirstOrDefault(c => c != null && Strip(c.gameObject.name) == name);
         }
 
         static IEnumerable<CardInfo> HiddenCards()
@@ -164,13 +149,15 @@ namespace RoundsPort.Runtime
         }
     }
 
+    // Cards picked from pooled/network-spawned objects don't always carry the exact "<name>(Clone)" name
+    // UnboundLib's GetSourceCard prefix requires, so it returns null and the card bar gets an empty button.
     [HarmonyPatch(typeof(CardChoice), nameof(CardChoice.GetSourceCard))]
     internal static class GetSourceCard_Fallback
     {
         [HarmonyPostfix, HarmonyPriority(Priority.Last)]
-        static void Postfix(CardChoice __instance, CardInfo info, ref CardInfo __result)
+        static void Postfix(CardInfo info, ref CardInfo __result)
         {
-            if (__result == null) __result = CardNames.FindSource(__instance, info);
+            if (__result == null && info != null) __result = CardNames.Find(CardNames.Strip(info.gameObject.name), false);
         }
     }
 
@@ -199,27 +186,11 @@ namespace RoundsPort.Runtime
             if (cardButton.m_cardInfo != null) return true;
             if (buttonCard.TryGetValue(cardButton.GetInstanceID(), out var name))
             {
-                var found = CardNames.FindByName(name);
+                var found = CardNames.Find(name, true);
                 if (found != null) { cardButton.m_cardInfo = found; return true; }
                 Log?.LogWarning($"card bar hover: no live card named {name}");
             }
             return false;   // skip instead of throwing
-        }
-    }
-
-    // UnboundLib builds mod cards with LocalizedString("StringTableCards", <title>) but never adds the entry,
-    // so CardName returns the "missing translation" text (with the title in quotes). Return the title instead.
-    [HarmonyPatch(typeof(CardInfo), nameof(CardInfo.CardName), MethodType.Getter)]
-    internal static class CardName_MissingTranslation
-    {
-        static void Postfix(CardInfo __instance, ref string __result)
-        {
-            var ls = __instance.LocalizedCardName;
-            if (ls == null || ls.IsEmpty || __result == null) return;
-            var key = ls.TableEntryReference.Key;
-            if (string.IsNullOrEmpty(key) || __result == key) return;
-            if (__result.Contains("'" + key + "'") || __result.StartsWith("No translation found", StringComparison.Ordinal))
-                __result = key;
         }
     }
 

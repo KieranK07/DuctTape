@@ -1,5 +1,4 @@
 using System.IO.Compression;
-using System.Security.Cryptography;
 using System.Text;
 using BepInEx.Logging;
 using Mono.Cecil;
@@ -39,17 +38,17 @@ sealed class Curated(string cache, ManualLogSource log)
             if (port == null) continue;
             var copies = g.Select(f => (path: f, bytes: File.ReadAllBytes(f))).ToList();
             if (!copies.Any(c => IsOld(c.path, c.bytes))) continue;
-            var installed = copies.Where(c => !IsOld(c.path, c.bytes)).OrderByDescending(c => Sha(c.bytes) == port.Sha).FirstOrDefault();
+            var installed = copies.Where(c => !IsOld(c.path, c.bytes)).OrderByDescending(c => AutoFix.Sha(c.bytes) == port.Sha).FirstOrDefault();
             if (installed.path != null) { needed[port.File] = (installed.path, Short(installed.path)); continue; }
             // patched now, before any mod is fixed: mods are fixed against the port, not the old release
-            var old = copies.Where(c => IsOld(c.path, c.bytes)).Select(c => (c.path, c.bytes, patch: Patches.TryGetValue(g.Key + "\t" + Sha(c.bytes), out var p) ? p : null)).ToList();
+            var old = copies.Where(c => IsOld(c.path, c.bytes)).Select(c => (c.path, c.bytes, patch: Patches.TryGetValue(g.Key + "\t" + AutoFix.Sha(c.bytes), out var p) ? p : null)).ToList();
             if (old.FirstOrDefault(o => o.patch != null) is { patch: { } first } src)
             {
                 var staged = Path.Combine(cache, "ports", first.After + ".dll");
-                if (!File.Exists(staged) || Sha(File.ReadAllBytes(staged)) != first.After)
+                if (!File.Exists(staged) || AutoFix.Sha(File.ReadAllBytes(staged)) != first.After)
                 {
                     var result = Bspatch(src.bytes, Resource(first));
-                    if (Sha(result) != first.After) { log.LogWarning($"the curated patch for {g.Key} gave the wrong file; left as it is"); continue; }
+                    if (AutoFix.Sha(result) != first.After) { log.LogWarning($"the curated patch for {g.Key} gave the wrong file; left as it is"); continue; }
                     Directory.CreateDirectory(Path.GetDirectoryName(staged)!);
                     File.WriteAllBytes(staged, result);
                 }
@@ -69,13 +68,13 @@ sealed class Curated(string cache, ManualLogSource log)
         {
             log.LogInfo($"{Short(path)}: Bknibb's port in place of the old release ({port.From})");
             bytes = File.ReadAllBytes(port.Path);
-            sha = Sha(bytes);   // the installed port may already have its hand-made patch from an earlier start
+            sha = AutoFix.Sha(bytes);   // the installed port may already have its hand-made patch from an earlier start
         }
         // one patch after another: an old library becomes its port, which then gets its own (macOS) patch
         for (var n = 0; n < 4 && Patches.TryGetValue(file + "\t" + sha, out var patch); n++)
         {
             var result = Bspatch(bytes, Resource(patch));
-            if (Sha(result) != patch.After) throw new InvalidDataException($"the curated patch for {file} gave the wrong file");
+            if (AutoFix.Sha(result) != patch.After) throw new InvalidDataException($"the curated patch for {file} gave the wrong file");
             log.LogInfo($"{Short(path)}: curated patch ({patch.Resource.Substring("curated/".Length)})");
             bytes = result;
             sha = patch.After;
@@ -169,11 +168,5 @@ sealed class Curated(string cache, ManualLogSource log)
     {
         long x = BitConverter.ToInt64(b, (int)at);
         return x < 0 ? -(x & long.MaxValue) : x;
-    }
-
-    static string Sha(byte[] bytes)
-    {
-        using var sha = SHA256.Create();
-        return BitConverter.ToString(sha.ComputeHash(bytes)).Replace("-", "").ToLowerInvariant();
     }
 }
