@@ -1,64 +1,51 @@
 # DuctTape
 
-Play mods made before the December 2025 update on the current game, without waiting for new versions of them.
-Install it next to your mods. Nothing to set up.
+Makes mods from before the December 2025 update work on the current version of ROUNDS.
 
-## What it does when the game starts
+## Install
 
-- **Libraries.** The old UnboundLib 3, MMHook and RoundsWithFriends 2 that most mods depend on don't work on the
-  current game. The newest of them (UnboundLib 3.2.14, MMHook 1.0.0, RoundsWithFriends 2.2.2) are patched into
-  ports for the current game ([Bknibb](https://github.com/Bknibb)'s RoundsWithFriends 3.0.10, and
-  [our fork](https://github.com/KieranK07/UnboundLib/tree/ducttape) of his UnboundLib 4.2.7 with a few fixes); keep them installed and
-  updated as usual. An older one gets a warning in the log.
-- **Mods.** Code the update renamed or removed (`playerID`, `maxHealth`, damage methods, card names and about 30
-  more) is rewritten in each old mod's DLL, the way a mod author would port it. This is the `fix` from
-  [rounds-port](https://github.com/KieranK07/rounds-porting-toolkit). Each mod is checked once; the first start takes a
-  few seconds longer (about 4 seconds for 70 mods), later ones don't.
-- **Hand-made fixes** for exact versions that needed more: Cosmic Rounds 2.7.0, MapsExtended 1.4.2, ModdingUtils 0.4.8,
-  Classes Manager Reborn 1.5.5, RarityLib 1.3.0, ModsPlus 1.6.2, Will's Wacky Map Objects 1.2.4, CardBarPatch 2.1.1,
-  GunChargePatch 0.0.4, Performance Improvements 0.2.0, and a few small patches.
-- **In game:** fixes for problems that only show while playing. Card names showing as missing translations, stat
-  lines without their names, empty card bar buttons, the first card pick not showing, MapsExtended maps without their
-  physics objects for clients, a grey screen with Map Embiggener, LobbyImprovements' missing lobby code box, modded cards out of sync between players online, and an
-  "update available" line for the UnboundLib and RoundsWithFriends DuctTape makes.
-- Adds Odin Serializer, which the game no longer ships (MapsExtended, Will's Wacky Cards and others use it).
-- Turns on `HideManagerGameObject` in `BepInEx.cfg`. Without it the current game destroys mods' objects.
+Install DuctTape with your mod manager, next to your mods. Keep UnboundLib, MMHook and RoundsWithFriends installed
+and updated as usual.
 
-Mods behave as they did on the old game. Nothing is added to menus or credits. Which of the 98 most-downloaded mods
-were tested and how they did:
-[COMPATIBILITY.md](https://github.com/KieranK07/rounds-porting-toolkit/blob/main/docs/COMPATIBILITY.md).
+Everyone in a lobby needs DuctTape and the same mods. Windows and Mac players can play together; on a Mac, use
+[Crosswind](https://github.com/KieranK07/crosswind).
 
-## Updated packages win
+## What it does
 
-If a newer UnboundLib or RoundsWithFriends is installed, that one is used in place of the old copies.
-Mods that already have a version for the current game load as they are.
+Every time the game starts, DuctTape:
+
+- swaps the old UnboundLib, MMHook and RoundsWithFriends for Bknibb's versions for the current game
+- updates each old mod's code for the current game (the first start takes a few seconds longer)
+- applies hand-made fixes to popular mods that needed more
+- fixes in-game problems the update caused
+- adds Odin Serializer and turns on `HideManagerGameObject` in `BepInEx.cfg`, which the current game needs
+
+Mods behave as they did on the old game. Mods already updated for the current game are left alone. See how the 98
+most-downloaded mods do:
+[compatibility list](https://github.com/KieranK07/rounds-porting-toolkit/blob/main/docs/COMPATIBILITY.md).
 
 ## Turning it off
 
-- **Old game build** (Steam beta `old-rounds-for-mods`): it notices, puts every original file back and does nothing
-  else.
-- `BepInEx/config/rounds-port.autofix.cfg`:
-  - `Exclude`: mods never to touch (`MapsExtended.dll` or `olavim-MapsExtended`).
-  - `RestoreOriginals = true`: puts every original back on the next start and turns this off.
-- Originals are kept in `BepInEx/cache/rounds-port`.
+Set `RestoreOriginals = true` in `BepInEx/config/rounds-port.autofix.cfg` and start the game once. Your mods get their
+original files back, and you can uninstall DuctTape. To leave a mod untouched, add it to `Exclude` in the same file.
 
-## Not fixed
+On the `old-rounds-for-mods` beta, DuctTape puts the original files back and does nothing else.
 
-- Mods that need their author: some flag "MANUAL" problems in `BepInEx/LogOutput.log` (the line says which). Most
-  still load; the part that uses the removed code doesn't work.
-- Bugs mods already had on the old game stay.
+## Problems
 
-Problems: open an issue on [GitHub](https://github.com/KieranK07/DuctTape/issues) with your
-`BepInEx/LogOutput.log`.
+Some mods need their author to update them; `BepInEx/LogOutput.log` lists these as MANUAL. Bugs a mod already had
+on the old game stay.
+
+Anything else: [open an issue](https://github.com/KieranK07/DuctTape/issues) with your `BepInEx/LogOutput.log`.
 
 ## Credits
 
-Bknibb's [UnboundLib](https://github.com/Bknibb/UnboundLib) and
-[RoundsWithFriends](https://github.com/Bknibb/RoundsWithFriends) ports, built in with his OK; UnboundLib from
-[our fork](https://github.com/KieranK07/UnboundLib/tree/ducttape) of his. Hand-made fixes from the
-[ROUNDS Porting Toolkit](https://github.com/KieranK07/rounds-porting-toolkit). RoundsWithFriends and the fixes for
-GPL-3.0 mods are GPL-3.0, with their source linked in `NOTICE.md` (in the `patchers` folder, next to AutoFix).
-[Octokit](https://github.com/octokit/octokit.net) (MIT, license included), which UnboundLib 4 uses.
-[Odin Serializer](https://github.com/TeamSirenix/odin-serializer) (Apache 2.0, license included).
-Built with [Mono.Cecil](https://github.com/jbevain/cecil) and [Harmony](https://github.com/pardeike/Harmony).
-ROUNDS is © Landfall Games; not affiliated with Landfall.
+- [Bknibb](https://github.com/Bknibb)'s UnboundLib and RoundsWithFriends ports, included with his OK. UnboundLib is
+  built from [our fork](https://github.com/KieranK07/UnboundLib/tree/ducttape) of his.
+- Hand-made fixes from the [ROUNDS Porting Toolkit](https://github.com/KieranK07/rounds-porting-toolkit).
+- [Odin Serializer](https://github.com/TeamSirenix/odin-serializer) (Apache 2.0) and
+  [Octokit](https://github.com/octokit/octokit.net) (MIT), licences included. Built with
+  [Mono.Cecil](https://github.com/jbevain/cecil) and [Harmony](https://github.com/pardeike/Harmony).
+- RoundsWithFriends and the fixes for GPL-3.0 mods are GPL-3.0. Source links are in `patchers/NOTICE.md`.
+
+ROUNDS is © Landfall Games. DuctTape is not affiliated with Landfall.
