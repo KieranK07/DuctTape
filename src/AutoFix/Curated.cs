@@ -8,8 +8,9 @@ using Mono.Cecil;
 // on any mod manager get it: old UnboundLib 3 / MMHook / RoundsWithFriends 2 files become Bknibb's ports, and exact mod
 // versions that needed hand-made fixes get their patch from the toolkit's patches/ (curated/, made by
 // scripts/curated.py). AutoFix's own fix runs on the result.
-// The ports are dependencies, installed like any mod; nothing is downloaded. Old copies (the old mods' own
-// dependencies) get the installed port's bytes, so whatever loads a library by name gets the port.
+// Nothing is downloaded. The newest old releases (UnboundLib 3.2.14, MMHook 1.0.0, RoundsWithFriends 2.2.2) become
+// the ports through hand-made patches (patches/PATCHLOG-libraries.md in the toolkit). If a port is installed as well,
+// old copies get its bytes instead, so whatever loads a library by name gets the port.
 sealed class Curated(ManualLogSource log)
 {
     sealed record Port(string File, string Sha, string Package);
@@ -27,8 +28,9 @@ sealed class Curated(ManualLogSource log)
     // old libraries this start replaces: (library file, path of the installed port)
     readonly Dictionary<string, string> needed = new(StringComparer.OrdinalIgnoreCase);
 
-    // Which old libraries get their port: an old release is installed and so is something newer (Bknibb's port first,
-    // whatever else isn't an old release otherwise). Without one the old library stays, with a warning.
+    // Which old libraries get an installed port: an old release is installed and so is something newer (Bknibb's port
+    // first, whatever else isn't an old release otherwise). Without one, a patch turns the old release into the port;
+    // an old release with no patch stays as it is, with a warning.
     public IEnumerable<string> Plan(IEnumerable<string> pluginFiles)
     {
         foreach (var g in pluginFiles.GroupBy(Path.GetFileName, StringComparer.OrdinalIgnoreCase))
@@ -38,8 +40,9 @@ sealed class Curated(ManualLogSource log)
             var copies = g.Select(f => (path: f, bytes: File.ReadAllBytes(f))).ToList();
             if (!copies.Any(c => IsOld(c.path, c.bytes))) continue;
             var installed = copies.Where(c => !IsOld(c.path, c.bytes)).OrderByDescending(c => Sha(c.bytes) == port.Sha).FirstOrDefault();
-            if (installed.path != null) needed[port.File] = installed.path;
-            else log.LogWarning($"{port.File} is the old release and nothing newer is installed: install Bknibb's {port.Package}. Until then, mods that need it won't load");
+            if (installed.path != null) { needed[port.File] = installed.path; continue; }
+            foreach (var (path, bytes) in copies.Where(c => IsOld(c.path, c.bytes) && !Patches.ContainsKey(g.Key + "\t" + Sha(c.bytes))))
+                log.LogWarning($"{Short(path)} is {OldName(bytes)}, which DuctTape can't update: update it in your mod manager (or install Bknibb's {port.Package}). Until then, mods that need it won't load");
         }
         return needed.Values;
     }
@@ -54,7 +57,8 @@ sealed class Curated(ManualLogSource log)
             bytes = File.ReadAllBytes(installed);
             sha = Sha(bytes);   // the installed port may already have its hand-made patch from an earlier start
         }
-        if (Patches.TryGetValue(file + "\t" + sha, out var patch))
+        // one patch after another: an old library becomes its port, which then gets its own (macOS) patch
+        for (var n = 0; n < 4 && Patches.TryGetValue(file + "\t" + sha, out var patch); n++)
         {
             using var s = typeof(Curated).Assembly.GetManifestResourceStream(patch.Resource)!;
             var ms = new MemoryStream();
@@ -63,12 +67,19 @@ sealed class Curated(ManualLogSource log)
             if (Sha(result) != patch.After) throw new InvalidDataException($"the curated patch for {file} gave the wrong file");
             log.LogInfo($"{Short(path)}: curated patch ({patch.Resource.Substring("curated/".Length)})");
             bytes = result;
+            sha = patch.After;
         }
         return bytes;
     }
 
     // <package folder>/<file>, as AutoFix's other lines name plugins
     static string Short(string path) => Path.GetFileName(Path.GetDirectoryName(path)) + "/" + Path.GetFileName(path);
+
+    static string OldName(byte[] bytes)
+    {
+        try { using var m = ModuleDefinition.ReadModule(new MemoryStream(bytes)); return $"{m.Assembly.Name.Name} {m.Assembly.Name.Version.ToString(3)}"; }
+        catch { return "an old release"; }
+    }
 
     static bool IsOld(string path, byte[] bytes)
     {

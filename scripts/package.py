@@ -31,6 +31,9 @@ FILES = {
     "plugins/OdinSerializer/Sirenix.Serialization.Config.dll": os.path.join(ODIN, "Sirenix.Serialization.Config.dll"),
     "plugins/OdinSerializer/Sirenix.Utilities.dll": os.path.join(ODIN, "Sirenix.Utilities.dll"),
     "plugins/OdinSerializer/LICENSE.txt": os.path.join(ODIN, "Sirenix-OdinSerializer-LICENSE.txt"),
+    # UnboundLib 4 (what the old UnboundLib is patched into) needs it; MIT, as in Bknibb's release
+    "plugins/Octokit/Octokit.dll": os.path.join(ROOT, "octokit", "Octokit.dll"),
+    "plugins/Octokit/LICENSE.txt": os.path.join(ROOT, "octokit", "LICENSE.txt"),
     "README.md": os.path.join(TS, "README.md"),
     "CHANGELOG.md": os.path.join(TS, "CHANGELOG.md"),
     "icon.png": os.path.join(TS, "icon.png"),

@@ -6,8 +6,9 @@ Install it next to your mods. Nothing to set up.
 ## What it does when the game starts
 
 - **Libraries.** The old UnboundLib 3, MMHook and RoundsWithFriends 2 that most mods depend on don't work on the
-  current game. [Bknibb](https://github.com/Bknibb)'s ports (UnboundLib 4, RoundsWithFriends 3) come with DuctTape as
-  dependencies, and the old copies your mods depend on get the port's file in their place.
+  current game. The newest of them (UnboundLib 3.2.14, MMHook 1.0.0, RoundsWithFriends 2.2.2) are patched into
+  [Bknibb](https://github.com/Bknibb)'s ports (UnboundLib 4.2.5, RoundsWithFriends 3.0.10); keep them installed and
+  updated as usual. An older one gets a warning in the log.
 - **Mods.** Code the update renamed or removed (`playerID`, `maxHealth`, damage methods, card names and about 30
   more) is rewritten in each old mod's DLL, the way a mod author would port it. This is the `fix` from
   [rounds-port](https://github.com/KieranK07/rounds-porting-toolkit). Each mod is checked once; the first start takes a
@@ -28,7 +29,7 @@ Mods behave as they did on the old game. Nothing is added to menus or credits.
 
 ## Updated packages win
 
-Whatever newer UnboundLib or RoundsWithFriends is installed is the one used (Bknibb's first), in place of the old copies.
+If a newer UnboundLib or RoundsWithFriends is installed, that one is used in place of the old copies.
 Mods that already have a version for the current game load as they are.
 
 ## Turning it off
@@ -52,7 +53,9 @@ Problems: open an issue on [GitHub](https://github.com/KieranK07/DuctTape/issues
 ## Credits
 
 Bknibb's [UnboundLib](https://github.com/Bknibb/UnboundLib) and
-[RoundsWithFriends](https://github.com/Bknibb/RoundsWithFriends) ports. Hand-made fixes from rounds-mac-modpack.
+[RoundsWithFriends](https://github.com/Bknibb/RoundsWithFriends) ports, built in with his OK. Hand-made fixes from the
+[ROUNDS Porting Toolkit](https://github.com/KieranK07/rounds-porting-toolkit).
+[Octokit](https://github.com/octokit/octokit.net) (MIT, license included), which UnboundLib 4 uses.
 [Odin Serializer](https://github.com/TeamSirenix/odin-serializer) (Apache 2.0, license included).
 Built with [Mono.Cecil](https://github.com/jbevain/cecil) and [Harmony](https://github.com/pardeike/Harmony).
 ROUNDS is © Landfall Games; not affiliated with Landfall.
