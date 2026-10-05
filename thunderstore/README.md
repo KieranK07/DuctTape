@@ -7,7 +7,8 @@ Install it next to your mods. Nothing to set up.
 
 - **Libraries.** The old UnboundLib 3, MMHook and RoundsWithFriends 2 that most mods depend on don't work on the
   current game. The newest of them (UnboundLib 3.2.14, MMHook 1.0.0, RoundsWithFriends 2.2.2) are patched into
-  [Bknibb](https://github.com/Bknibb)'s ports (UnboundLib 4.2.7, RoundsWithFriends 3.0.10); keep them installed and
+  ports for the current game ([Bknibb](https://github.com/Bknibb)'s RoundsWithFriends 3.0.10, and
+  [our fork](https://github.com/KieranK07/UnboundLib/tree/ducttape) of his UnboundLib 4.2.7 with a few fixes); keep them installed and
   updated as usual. An older one gets a warning in the log.
 - **Mods.** Code the update renamed or removed (`playerID`, `maxHealth`, damage methods, card names and about 30
   more) is rewritten in each old mod's DLL, the way a mod author would port it. This is the `fix` from
@@ -53,7 +54,8 @@ Problems: open an issue on [GitHub](https://github.com/KieranK07/DuctTape/issues
 ## Credits
 
 Bknibb's [UnboundLib](https://github.com/Bknibb/UnboundLib) and
-[RoundsWithFriends](https://github.com/Bknibb/RoundsWithFriends) ports, built in with his OK. Hand-made fixes from the
+[RoundsWithFriends](https://github.com/Bknibb/RoundsWithFriends) ports, built in with his OK; UnboundLib from
+[our fork](https://github.com/KieranK07/UnboundLib/tree/ducttape) of his. Hand-made fixes from the
 [ROUNDS Porting Toolkit](https://github.com/KieranK07/rounds-porting-toolkit). RoundsWithFriends and the fixes for
 GPL-3.0 mods are GPL-3.0, with their source linked in `NOTICE.md` (in the `patchers` folder, next to AutoFix).
 [Octokit](https://github.com/octokit/octokit.net) (MIT, license included), which UnboundLib 4 uses.

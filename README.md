@@ -98,5 +98,6 @@ ROUNDS somewhere else: `-p:GameDir=...`. The toolkit somewhere else: `-p:Toolkit
 
 More: [AutoFix](docs/AUTOFIX.md) (the load-time patcher), [Runtime](docs/RUNTIME.md) (the in-game fixes).
 
-Bknibb's UnboundLib and RoundsWithFriends ports are built in with his OK. MIT licensed. ROUNDS is © Landfall Games;
+Bknibb's UnboundLib and RoundsWithFriends ports are built in with his OK (UnboundLib from
+[our fork](https://github.com/KieranK07/UnboundLib/tree/ducttape) of his, with fixes for the current game). MIT licensed. ROUNDS is © Landfall Games;
 not affiliated with Landfall.

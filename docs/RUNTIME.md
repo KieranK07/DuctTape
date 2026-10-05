@@ -25,6 +25,7 @@ rounds-mac-modpack's Mac Compat Fixes is installed, BepInEx skips this plugin: t
 | UnboundLib 4 health bars | Bknibb's UnboundLib 4 colours health bars for players with respawns left, reading `data.stats` every frame; things that aren't players (Cards+ snakes) have none and it threw every frame. UnboundLib 3 had no such patch |
 | Update notices | Bknibb's UnboundLib 4 and RoundsWithFriends 3 put "has an update available!" on the main menu when GitHub has a newer release. UnboundLib 3 had no such check, and the copies AutoFix makes can't be updated by a mod manager. Skipped for the exact versions AutoFix makes (UnboundLib 4.2.7, RoundsWithFriends 3.0.10) |
 | Undrawn text materials | Asking a TextMeshPro text that hasn't been drawn yet for its materials throws now: LobbyImprovements builds its lobby code box from the main menu's font that way, so the box was never made |
+| Prefab card text | Cards saved in an asset bundle and registered as they are (`CustomCard.RegisterUnityCard`: RSCards and others) keep their title and description in `cardName` / `cardDestription`; the current game draws both from localization, which they were saved without, so they showed no description. A card with old text and no localized text gets a LocalizedString with the text as its key, as UnboundLib 4 gives the cards it builds (`CardTextFixes.cs`). |
 
 Source: `src/Runtime`. Patches whose target mod isn't installed are skipped. Safe to swap with Hot Reload: every load
 patches under its own Harmony id and undoes everything when it unloads.

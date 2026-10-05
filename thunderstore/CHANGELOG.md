@@ -2,9 +2,12 @@
 
 ## 1.1.1
 
-UnboundLib 3.2.14 is now patched into Bknibb's UnboundLib 4.2.7 (was 4.2.5). Runtime 1.6.0: no "UnboundLib has an
-update available!" line on the main menu for the UnboundLib and RoundsWithFriends DuctTape makes, since a mod manager
-can't update them. AutoFix 1.5.1.
+UnboundLib 3.2.14 now becomes our fork of Bknibb's UnboundLib 4.2.7 (was his 4.2.5), with fixes for the current
+game: Escape goes back a page in the escape menu's MODS pages again, Toggle Cards and Toggle Levels open in front of
+the escape menu and the map (they opened behind them), and it works on a Mac without a separate fix. No "has an update
+available!" line on the main menu for the UnboundLib and RoundsWithFriends DuctTape makes, since a mod manager can't
+update them. Cards built from an asset bundle (RSCards and others) show their descriptions again. AutoFix 1.5.1,
+Runtime 1.6.0.
 
 ## 1.1.0
 
