@@ -6,8 +6,8 @@ Install it next to your mods. Nothing to set up.
 ## What it does when the game starts
 
 - **Libraries.** The old UnboundLib 3, MMHook and RoundsWithFriends 2 that most mods depend on don't work on the
-  current game. Install [Bknibb](https://github.com/Bknibb)'s ports with DuctTape (UnboundLib 4,
-  RoundsWithFriends 3): the old copies your mods depend on get the port's file in their place.
+  current game. [Bknibb](https://github.com/Bknibb)'s ports (UnboundLib 4, RoundsWithFriends 3) come with DuctTape as
+  dependencies, and the old copies your mods depend on get the port's file in their place.
 - **Mods.** Code the update renamed or removed (`playerID`, `maxHealth`, damage methods, card names and about 30
   more) is rewritten in each old mod's DLL, the way a mod author would port it. This is the `fix` from
   [rounds-port](https://github.com/KieranK07/rounds-porting-toolkit). Each mod is checked once; the first start takes a

@@ -1,0 +1,29 @@
+<!-- DuctTape's icon. Render at 256x256 (the text is DIN Condensed, a macOS font). -->
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <defs>
+    <linearGradient id="tape" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#d7dbe1"/>
+      <stop offset="0.5" stop-color="#b4bac3"/>
+      <stop offset="1" stop-color="#959ca7"/>
+    </linearGradient>
+    <pattern id="weave" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(-8)">
+      <path d="M0 2 H4" stroke="#ffffff" stroke-opacity="0.18" stroke-width="0.8"/>
+      <path d="M2 0 V4" stroke="#5d6470" stroke-opacity="0.12" stroke-width="0.6"/>
+    </pattern>
+    <filter id="shadow" x="-20%" y="-50%" width="140%" height="200%">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#000" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+  <rect width="256" height="256" fill="#14181f"/>
+  <!-- the two players -->
+  <circle cx="84" cy="98" r="52" fill="#e0592a"/>
+  <circle cx="172" cy="98" r="52" fill="#2f6fd0"/>
+  <!-- a strip of tape holding them together, torn at both ends -->
+  <clipPath id="stripclip"><path d="M61 80 L192 80 L198 85 L191 90 L197 96 L190 101 L196 107 L191 112 L195 116 L64 116 L58 111 L65 106 L59 100 L66 95 L60 89 L65 84 Z"/></clipPath>
+  <g transform="rotate(-8 128 98)">
+    <path d="M61 80 L192 80 L198 85 L191 90 L197 96 L190 101 L196 107 L191 112 L195 116 L64 116 L58 111 L65 106 L59 100 L66 95 L60 89 L65 84 Z" fill="url(#tape)" filter="url(#shadow)"/>
+    <rect x="56" y="78" width="144" height="40" fill="url(#weave)" clip-path="url(#stripclip)"/>
+  </g>
+  <text x="128" y="226" text-anchor="middle" font-family="DIN Condensed, 'Avenir Next Condensed', 'Arial Narrow', sans-serif"
+        font-weight="700" font-size="54" letter-spacing="2" fill="#f2f4f7">DUCT TAPE</text>
+</svg>
