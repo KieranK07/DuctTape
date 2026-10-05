@@ -9,7 +9,7 @@
          file can't be swapped). The compiler names the assembly after its file, so it's built as 0rounds-port.AutoFix.dll
          and copied to rounds-port.AutoFix.dll. -->
     <AssemblyName>0rounds-port.AutoFix</AssemblyName>
-    <Version>1.5.0</Version>
+    <Version>1.5.1</Version>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>

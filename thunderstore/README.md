@@ -7,7 +7,7 @@ Install it next to your mods. Nothing to set up.
 
 - **Libraries.** The old UnboundLib 3, MMHook and RoundsWithFriends 2 that most mods depend on don't work on the
   current game. The newest of them (UnboundLib 3.2.14, MMHook 1.0.0, RoundsWithFriends 2.2.2) are patched into
-  [Bknibb](https://github.com/Bknibb)'s ports (UnboundLib 4.2.5, RoundsWithFriends 3.0.10); keep them installed and
+  [Bknibb](https://github.com/Bknibb)'s ports (UnboundLib 4.2.7, RoundsWithFriends 3.0.10); keep them installed and
   updated as usual. An older one gets a warning in the log.
 - **Mods.** Code the update renamed or removed (`playerID`, `maxHealth`, damage methods, card names and about 30
   more) is rewritten in each old mod's DLL, the way a mod author would port it. This is the `fix` from
@@ -18,7 +18,8 @@ Install it next to your mods. Nothing to set up.
   GunChargePatch 0.0.4, Performance Improvements 0.2.0, and a few small patches.
 - **In game:** fixes for problems that only show while playing. Card names showing as missing translations, stat
   lines without their names, empty card bar buttons, the first card pick not showing, MapsExtended maps without their
-  physics objects for clients, a grey screen with Map Embiggener, LobbyImprovements' missing lobby code box, modded cards out of sync between players online.
+  physics objects for clients, a grey screen with Map Embiggener, LobbyImprovements' missing lobby code box, modded cards out of sync between players online, and an
+  "update available" line for the UnboundLib and RoundsWithFriends DuctTape makes.
 - Adds Odin Serializer, which the game no longer ships (MapsExtended, Will's Wacky Cards and others use it).
 - Turns on `HideManagerGameObject` in `BepInEx.cfg`. Without it the current game destroys mods' objects.
 
