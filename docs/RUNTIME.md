@@ -6,7 +6,7 @@ except DuctTape's line in UnboundLib's credits (only when it runs from the DuctT
 `rounds-port`.
 
 Install: `rounds-port.Runtime.dll` in `BepInEx/plugins/`. Needs BepInEx 5.4.23 and the current game. If the
-rounds-mac-modpack's Mac Compat Fixes is installed, BepInEx skips this plugin: that one has the same fixes.
+old Mac modpack's Mac Compat Fixes is still installed, BepInEx skips this plugin: that one has the same fixes.
 
 | Fix | What goes wrong without it |
 |---|---|

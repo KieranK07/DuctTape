@@ -26,7 +26,7 @@ At each start, before any plugin loads:
   port is installed as well (anything that isn't an old release, Bknibb's exact file first), old copies get its bytes
   instead. An older release with neither stays as it is, with a warning, and the next start looks again.
 - **Curated patches:** exact mod versions that needed hand-made fixes (Cosmic Rounds 2.7.0, MapsExtended 1.4.2,
-  ModdingUtils 0.4.8, ...) get the rounds-mac-modpack's binary patch, found by the file's SHA-256 (`src/AutoFix/curated`,
+  ModdingUtils 0.4.8, ...) get a hand-made binary patch, found by the file's SHA-256 (`src/AutoFix/curated`,
   made by `scripts/curated.py` from the toolkit's `patches/`), then `fix` as usual.
 - Every DLL in `BepInEx/plugins` that uses the game or UnboundLib is scanned and fixed, like `rounds-port fix`.
 - A mod `fix` changes is **replaced in place** by the fixed copy. The original goes to
@@ -66,8 +66,8 @@ fixed mods then stay fixed until the mod manager reinstalls them.
 
 ## Multiplayer
 
-Everyone running AutoFix gets the same files. Players with mods ported by `rounds-port fix` (or the
-rounds-mac-modpack) run the same code: AutoFix's output has the same meaning as the CLI's, though not the same bytes
+Everyone running AutoFix gets the same files. Players with mods ported by `rounds-port fix` run the
+same code: AutoFix's output has the same meaning as the CLI's, though not the same bytes
 (it uses BepInEx's Mono.Cecil 0.10.4; the CLI uses 0.11.6). UnboundLib's mod check compares IDs and versions only, and
 `fix` never changes them.
 
