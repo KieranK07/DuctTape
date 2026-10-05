@@ -16,7 +16,7 @@ sealed class Curated(string cache, ManualLogSource log)
 
     static readonly Port[] Ports =
     {
-        new("UnboundLib.dll", "3d2b7825fe6f81cb46d5c10119e72975899a5d3dd5c7dea9fd7f71918fe93a7e", "UnboundLib 4 (https://github.com/Bknibb/UnboundLib/releases)"),
+        new("UnboundLib.dll", "2eecd826d889cc1dda5efc0433bc77ab9bafa85cacc00323f3a8c7de79558154", "UnboundLib 4 (https://github.com/Bknibb/UnboundLib/releases)"),
         new("MMHOOK_Assembly-CSharp.dll", "926b53b329d94f6a8842e6d51ca17ff96f081df59695d7862845d5ccce9e5a62", "UnboundLib 4 (https://github.com/Bknibb/UnboundLib/releases)"),
         new("RoundsWithFriends.dll", "1bd4d5aa47de0e04661710a77bb0b5f1214dac4b3baabc9364b3418ecbc8ab61", "RoundsWithFriends 3 (https://github.com/Bknibb/RoundsWithFriends/releases)"),
     };
