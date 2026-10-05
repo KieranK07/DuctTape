@@ -11,7 +11,7 @@ using Mono.Cecil;
 // Nothing is downloaded. The newest old releases (UnboundLib 3.2.14, MMHook 1.0.0, RoundsWithFriends 2.2.2) become
 // the ports through hand-made patches (patches/PATCHLOG-libraries.md in the toolkit). If a port is installed as well,
 // old copies get its bytes instead, so whatever loads a library by name gets the port.
-sealed class Curated(ManualLogSource log)
+sealed class Curated(string cache, ManualLogSource log)
 {
     sealed record Port(string File, string Sha, string Package);
 
@@ -25,8 +25,8 @@ sealed class Curated(ManualLogSource log)
     sealed record Patch(string Name, string Before, string After, string Resource);
     static readonly Dictionary<string, Patch> Patches = ReadPatches();
 
-    // old libraries this start replaces: (library file, path of the installed port)
-    readonly Dictionary<string, string> needed = new(StringComparer.OrdinalIgnoreCase);
+    // old libraries this start replaces: library file -> (the port's file, where it came from for the log)
+    readonly Dictionary<string, (string Path, string From)> needed = new(StringComparer.OrdinalIgnoreCase);
 
     // Which old libraries get an installed port: an old release is installed and so is something newer (Bknibb's port
     // first, whatever else isn't an old release otherwise). Without one, a patch turns the old release into the port;
@@ -40,30 +40,41 @@ sealed class Curated(ManualLogSource log)
             var copies = g.Select(f => (path: f, bytes: File.ReadAllBytes(f))).ToList();
             if (!copies.Any(c => IsOld(c.path, c.bytes))) continue;
             var installed = copies.Where(c => !IsOld(c.path, c.bytes)).OrderByDescending(c => Sha(c.bytes) == port.Sha).FirstOrDefault();
-            if (installed.path != null) { needed[port.File] = installed.path; continue; }
-            foreach (var (path, bytes) in copies.Where(c => IsOld(c.path, c.bytes) && !Patches.ContainsKey(g.Key + "\t" + Sha(c.bytes))))
+            if (installed.path != null) { needed[port.File] = (installed.path, Short(installed.path)); continue; }
+            // patched now, before any mod is fixed: mods are fixed against the port, not the old release
+            var old = copies.Where(c => IsOld(c.path, c.bytes)).Select(c => (c.path, c.bytes, patch: Patches.TryGetValue(g.Key + "\t" + Sha(c.bytes), out var p) ? p : null)).ToList();
+            if (old.FirstOrDefault(o => o.patch != null) is { patch: { } first } src)
+            {
+                var staged = Path.Combine(cache, "ports", first.After + ".dll");
+                if (!File.Exists(staged) || Sha(File.ReadAllBytes(staged)) != first.After)
+                {
+                    var result = Bspatch(src.bytes, Resource(first));
+                    if (Sha(result) != first.After) { log.LogWarning($"the curated patch for {g.Key} gave the wrong file; left as it is"); continue; }
+                    Directory.CreateDirectory(Path.GetDirectoryName(staged)!);
+                    File.WriteAllBytes(staged, result);
+                }
+                needed[port.File] = (staged, "curated patch " + first.Resource.Substring("curated/".Length));
+            }
+            foreach (var (path, bytes, _) in old.Where(o => o.patch == null && !needed.ContainsKey(port.File)))
                 log.LogWarning($"{Short(path)} is {OldName(bytes)}, which DuctTape can't update: update it in your mod manager (or install Bknibb's {port.Package}). Until then, mods that need it won't load");
         }
-        return needed.Values;
+        return needed.Values.Select(n => n.Path);
     }
 
     // The bytes to start from instead of a plugin's own (the same array when nothing applies).
     public byte[] Apply(string path, byte[] bytes, string sha)
     {
         var file = Path.GetFileName(path);
-        if (needed.TryGetValue(file, out var installed) && IsOld(path, bytes))
+        if (needed.TryGetValue(file, out var port) && IsOld(path, bytes))
         {
-            log.LogInfo($"{Short(path)}: Bknibb's port in place of the old release ({Short(installed)})");
-            bytes = File.ReadAllBytes(installed);
+            log.LogInfo($"{Short(path)}: Bknibb's port in place of the old release ({port.From})");
+            bytes = File.ReadAllBytes(port.Path);
             sha = Sha(bytes);   // the installed port may already have its hand-made patch from an earlier start
         }
         // one patch after another: an old library becomes its port, which then gets its own (macOS) patch
         for (var n = 0; n < 4 && Patches.TryGetValue(file + "\t" + sha, out var patch); n++)
         {
-            using var s = typeof(Curated).Assembly.GetManifestResourceStream(patch.Resource)!;
-            var ms = new MemoryStream();
-            s.CopyTo(ms);
-            var result = Bspatch(bytes, ms.ToArray());
+            var result = Bspatch(bytes, Resource(patch));
             if (Sha(result) != patch.After) throw new InvalidDataException($"the curated patch for {file} gave the wrong file");
             log.LogInfo($"{Short(path)}: curated patch ({patch.Resource.Substring("curated/".Length)})");
             bytes = result;
@@ -74,6 +85,14 @@ sealed class Curated(ManualLogSource log)
 
     // <package folder>/<file>, as AutoFix's other lines name plugins
     static string Short(string path) => Path.GetFileName(Path.GetDirectoryName(path)) + "/" + Path.GetFileName(path);
+
+    static byte[] Resource(Patch patch)
+    {
+        using var s = typeof(Curated).Assembly.GetManifestResourceStream(patch.Resource)!;
+        var ms = new MemoryStream();
+        s.CopyTo(ms);
+        return ms.ToArray();
+    }
 
     static string OldName(byte[] bytes)
     {

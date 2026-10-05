@@ -25,7 +25,7 @@ sealed class AutoFix(AutoFix.Settings settings, ManualLogSource log)
 
     readonly string indexPath = Path.Combine(settings.Cache, "index.tsv");
     readonly string originals = Path.Combine(settings.Cache, "originals");
-    readonly Curated curated = new(log);
+    readonly Curated curated = new(settings.Cache, log);
     Game? game;
     Scanner? scanner;
 
