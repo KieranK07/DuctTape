@@ -2,15 +2,17 @@
 
 ## 1.1.1
 
-UnboundLib 3.2.14 now becomes our fork of Bknibb's UnboundLib 4.2.7 (was his 4.2.5), with fixes for the current
-game: Escape goes back a page in the escape menu's MODS pages again, Toggle Cards and Toggle Levels open in front of
-the escape menu and the map (they opened behind them), a rematch no longer gets stuck on a card that's already gone, in sandbox you spawn
-in on custom maps too,
-and it works on a Mac without a separate fix. No "has an update
-available!" line on the main menu for the UnboundLib and RoundsWithFriends DuctTape makes, since a mod manager can't
-update them. Cards built from an asset bundle (RSCards and others) show their descriptions again. With LobbyImprovements, friends can
-join your lobby by code again: it hid every room it hosted, which the current game can't find by code, and its lobby
-code only took digit room names. AutoFix 1.5.1,
+UnboundLib now comes from our fork of Bknibb's 4.2.7 (was his 4.2.5), with fixes for the current game:
+
+- Escape goes back a page in the pause menu's MODS pages.
+- Toggle Cards and Toggle Levels open in front of the pause menu and the map; in sandbox their cards turn face up.
+- Sandbox: you spawn on custom maps too, and the card name box closes when you pause.
+- A rematch no longer gets stuck on a card that's gone.
+- No "update available" line for the UnboundLib and RoundsWithFriends DuctTape makes.
+- Works on a Mac without a separate fix.
+
+Cards from packs with their own card frame (RSCards, Root's packs) show their name, text and stats again. With
+LobbyImprovements, friends can join your lobby by code again. DuctTape is listed in the credits. AutoFix 1.5.1,
 Runtime 1.6.0.
 
 ## 1.1.0
