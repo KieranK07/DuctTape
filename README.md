@@ -1,6 +1,6 @@
 # DuctTape
 
-Runs mods made before the December 2025 update on the current ROUNDS.
+Patches mods made before the December 2025 update on the current ROUNDS.
 
 ## Install
 
