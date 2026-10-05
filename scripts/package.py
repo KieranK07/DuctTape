@@ -26,6 +26,9 @@ BIN = lambda p, f: os.path.join(ROOT, "src", p, "bin", "Release", "net472", f)
 
 FILES = {
     "patchers/rounds-port.AutoFix.dll": BIN("AutoFix", "rounds-port.AutoFix.dll"),
+    # its patches turn some mods into GPL-3.0 code: the notice and the licence go with it
+    "patchers/NOTICE.md": os.path.join(TS, "NOTICE.md"),
+    "patchers/LICENSE-GPL-3.0.txt": os.path.join(TS, "LICENSE-GPL-3.0.txt"),
     "plugins/rounds-port.Runtime.dll": BIN("Runtime", "rounds-port.Runtime.dll"),
     "plugins/OdinSerializer/Sirenix.Serialization.dll": os.path.join(ODIN, "Sirenix.Serialization.dll"),
     "plugins/OdinSerializer/Sirenix.Serialization.Config.dll": os.path.join(ODIN, "Sirenix.Serialization.Config.dll"),

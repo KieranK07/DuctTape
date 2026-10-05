@@ -19,13 +19,12 @@ Install it next to your mods. Nothing to set up.
 - **In game:** fixes for problems that only show while playing. Card names showing as missing translations, stat
   lines without their names, empty card bar buttons, the first card pick not showing, MapsExtended maps without their
   physics objects for clients, a grey screen with Map Embiggener, LobbyImprovements' missing lobby code box, modded cards out of sync between players online.
-
-Which of the 98 most-downloaded mods were tested and how they did:
-[COMPATIBILITY.md](https://github.com/KieranK07/rounds-porting-toolkit/blob/main/docs/COMPATIBILITY.md).
 - Adds Odin Serializer, which the game no longer ships (MapsExtended, Will's Wacky Cards and others use it).
 - Turns on `HideManagerGameObject` in `BepInEx.cfg`. Without it the current game destroys mods' objects.
 
-Mods behave as they did on the old game. Nothing is added to menus or credits.
+Mods behave as they did on the old game. Nothing is added to menus or credits. Which of the 98 most-downloaded mods
+were tested and how they did:
+[COMPATIBILITY.md](https://github.com/KieranK07/rounds-porting-toolkit/blob/main/docs/COMPATIBILITY.md).
 
 ## Updated packages win
 
@@ -54,7 +53,8 @@ Problems: open an issue on [GitHub](https://github.com/KieranK07/DuctTape/issues
 
 Bknibb's [UnboundLib](https://github.com/Bknibb/UnboundLib) and
 [RoundsWithFriends](https://github.com/Bknibb/RoundsWithFriends) ports, built in with his OK. Hand-made fixes from the
-[ROUNDS Porting Toolkit](https://github.com/KieranK07/rounds-porting-toolkit).
+[ROUNDS Porting Toolkit](https://github.com/KieranK07/rounds-porting-toolkit). RoundsWithFriends and the fixes for
+GPL-3.0 mods are GPL-3.0, with their source linked in `NOTICE.md` (in the `patchers` folder, next to AutoFix).
 [Octokit](https://github.com/octokit/octokit.net) (MIT, license included), which UnboundLib 4 uses.
 [Odin Serializer](https://github.com/TeamSirenix/odin-serializer) (Apache 2.0, license included).
 Built with [Mono.Cecil](https://github.com/jbevain/cecil) and [Harmony](https://github.com/pardeike/Harmony).
