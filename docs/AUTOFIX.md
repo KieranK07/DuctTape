@@ -5,8 +5,7 @@ them. Players keep the mods from Thunderstore as they are; nobody needs a new re
 parts `fix` handles.
 
 Players get it in the DuctTape package (`thunderstore/`, built by `scripts/package.py`) with the Runtime and Odin
-Serializer. [Crosswind](https://github.com/KieranK07/crosswind) does the library and patch steps itself before launch;
-AutoFix then finds nothing left to do for them.
+Serializer. In [Crosswind](https://github.com/KieranK07/crosswind) it installs like any other mod.
 
 ## Install
 
@@ -86,5 +85,4 @@ UnboundLib and RWF), hard-linked like Gale's:
 - None of the hard-linked originals changed.
 - Same results with the Windows release's `BepInEx.dll` and the macOS v5-lts build.
 
-In game (Windows, `port-tests/ingame`): a profile laid out as r2modman does (Thunderstore originals plus the package, no
-Gale layer) starts, swaps the libraries, applies the curated patches and plays a full AI match.
+In game (Windows, `port-tests/ingame`): a profile laid out as r2modman does (Thunderstore originals plus the package) starts, swaps the libraries, applies the curated patches and plays a full AI match.
