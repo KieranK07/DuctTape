@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
+using Photon.Realtime;
 
 namespace RoundsPort.Runtime
 {
@@ -90,6 +91,37 @@ namespace RoundsPort.Runtime
             foreach (var i in code)
             {
                 if (i.opcode == OpCodes.Ldftn && i.operand is MethodInfo m && m == IsDigit) i.operand = IsLetterOrDigit;
+                yield return i;
+            }
+        }
+    }
+
+    // The old game hid private rooms and joined them by name, so LobbyImprovements took a visible room for a quick-match
+    // room: a client left it and a host hid it. The current game keeps private rooms visible in its room-code lobby and
+    // joins them by searching that lobby for the code, so the hidden room was never found ("Found no rooms to join"):
+    // nobody could join a LobbyImprovements host by code. A room with a room code is private, so LobbyImprovements now
+    // leaves it as it is; quick-match rooms (they have no code, and quick match never searches the room-code lobby) are
+    // handled as before.
+    [HarmonyPatch]
+    internal static class LI_CodeRoomsStayVisible_Fix
+    {
+        static MethodBase TargetMethod() => AccessTools.Method(Types.Find("LobbyImprovements.Networking.LobbyMonitor"), "OnJoinedRoom");
+        static bool Prepare() => Types.Find("LobbyImprovements.Networking.LobbyMonitor") != null && TargetMethod() != null;
+
+        internal static bool QuickMatchRoom(Room room) =>
+            room.IsVisible && !room.CustomProperties.ContainsKey(NetworkConnectionHandler.ROOM_CODE);
+
+        // its check is `PhotonNetwork.CurrentRoom.IsVisible`
+        static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> code)
+        {
+            var quickMatch = AccessTools.Method(typeof(LI_CodeRoomsStayVisible_Fix), nameof(QuickMatchRoom));
+            foreach (var i in code)
+            {
+                if ((i.opcode == OpCodes.Callvirt || i.opcode == OpCodes.Call) && i.operand is MethodInfo m && m.Name == "get_IsVisible")
+                {
+                    i.opcode = OpCodes.Call;
+                    i.operand = quickMatch;
+                }
                 yield return i;
             }
         }

@@ -28,5 +28,7 @@
     <Reference Include="$(Managed)/UnityEngine.AssetBundleModule.dll" Private="false" />
     <Reference Include="$(Managed)/Unity.Postprocessing.Runtime.dll" Private="false" />
     <Reference Include="$(Managed)/netstandard.dll" Private="false" />
+    <Reference Include="$(Managed)/PhotonRealtime.dll" Private="false" />
+    <Reference Include="$(Managed)/Photon3Unity3D.dll" Private="false" />
   </ItemGroup>
 </Project>

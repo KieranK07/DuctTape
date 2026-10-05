@@ -8,8 +8,9 @@ the escape menu and the map (they opened behind them), a rematch no longer gets 
 in on custom maps too,
 and it works on a Mac without a separate fix. No "has an update
 available!" line on the main menu for the UnboundLib and RoundsWithFriends DuctTape makes, since a mod manager can't
-update them. Cards built from an asset bundle (RSCards and others) show their descriptions again. LobbyImprovements' lobby
-code works again (the current game names rooms with letters; it only took digits). AutoFix 1.5.1,
+update them. Cards built from an asset bundle (RSCards and others) show their descriptions again. With LobbyImprovements, friends can
+join your lobby by code again: it hid every room it hosted, which the current game can't find by code, and its lobby
+code only took digit room names. AutoFix 1.5.1,
 Runtime 1.6.0.
 
 ## 1.1.0
