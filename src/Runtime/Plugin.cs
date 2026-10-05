@@ -9,7 +9,8 @@ using UnityEngine.SceneManagement;
 namespace RoundsPort.Runtime
 {
     // Fixes that can't be made in a mod's DLL: old mods running together on the current game throw or draw wrong in
-    // ways only a runtime patch can catch. Each one restores what the old game did; nothing is added to the game's UI.
+    // ways only a runtime patch can catch. Each one restores what the old game did; the only thing added to the game's UI
+    // is DuctTape's line in the credits.
     // Hot-reload safe: a new copy can load while an old one is still around, and OnDestroy undoes everything.
     [BepInPlugin("rounds-port.runtime", "rounds-port Runtime", "1.6.0")]
     // The rounds-mac-modpack plugin carries the same fixes (and its own extras); when it is installed it takes over.
@@ -75,6 +76,20 @@ namespace RoundsPort.Runtime
                 helper.AddComponent<ShaderFixRunner>();
             }
             log.LogInfo($"runtime fixes {Info.Metadata.Version} loaded ({SystemInfo.graphicsDeviceType})");
+        }
+
+        // DuctTape's entry in UnboundLib's credits. Only from the DuctTape package: Crosswind and the toolkit ship this
+        // plugin too. Start, not Awake: UnboundLib's credits list is made in its own Awake.
+        private void Start()
+        {
+            if (harmony == null) return;
+            try
+            {
+                if (Info.Location.IndexOf("DuctTape", StringComparison.OrdinalIgnoreCase) < 0) return;
+                var register = AccessTools.Method("UnboundLib.Unbound:RegisterCredits", new[] { typeof(string), typeof(string[]), typeof(string[]), typeof(string[]) });
+                register?.Invoke(null, new object[] { "DuctTape", new[] { "Kieran" }, new[] { "GitHub" }, new[] { "https://github.com/KieranK07/DuctTape" } });
+            }
+            catch (Exception e) { log.LogWarning("credits not added: " + e.GetBaseException().Message); }
         }
 
         void OnSceneLoaded(Scene s, LoadSceneMode m) => ShaderFix.Sweep();

@@ -1,8 +1,9 @@
 # rounds-port Runtime
 
 A BepInEx plugin for problems `fix` can't solve in a mod's DLL: old mods that load on the current game but then throw,
-or draw wrong, while running together. Each patch puts back what the old game did. It adds nothing to the menus,
-registers no credits, and writes to the log as `rounds-port`.
+or draw wrong, while running together. Each patch puts back what the old game did. It adds nothing to the menus
+except DuctTape's line in UnboundLib's credits (only when it runs from the DuctTape package), and writes to the log as
+`rounds-port`.
 
 Install: `rounds-port.Runtime.dll` in `BepInEx/plugins/`. Needs BepInEx 5.4.23 and the current game. If the
 rounds-mac-modpack's Mac Compat Fixes is installed, BepInEx skips this plugin: that one has the same fixes.
